@@ -6,8 +6,11 @@ import {
   HttpCode,
   Post,
   Req,
+  Param,
+  Body,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { CreateCatDto } from './dto/create-cat.dto';
 // import { CatsService } from './cats.service';
 // import { CreateCatDto } from './dto/create-cat.dto';
 // import { UpdateCatDto } from './dto/update-cat.dto';
@@ -15,8 +18,8 @@ import { Request } from 'express';
 @Controller('cats')
 export class CatsController {
   @Post()
-  create(): string {
-    return 'Metodo create';
+  create(@Body() createCatDto: CreateCatDto): CreateCatDto {
+    return createCatDto;
   }
 
   @Get('redirect')
@@ -44,6 +47,17 @@ export class CatsController {
     return 'O * assume qualquer valor';
   }
 
+  @Get(':id')
+  findOne(@Param() params: any): string {
+    const id = params.id;
+    return `This action return a #${id} cat`;
+  }
+
+  @Get('breed/:catsId')
+  findTwo(@Param('catsId') id: string): string {
+    return `This action return a #${id} breed`;
+  }
+
   // constructor(private readonly catsService: CatsService) {}
   // @Post()
   // create(@Body() createCatDto: CreateCatDto) {
@@ -53,10 +67,7 @@ export class CatsController {
   // findAll() {
   //   return this.catsService.findAll();
   // }
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.catsService.findOne(+id);
-  // }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
   //   return this.catsService.update(+id, updateCatDto);
